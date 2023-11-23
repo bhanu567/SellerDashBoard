@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   axios
-    .get("https://crudcrud.com/api/830508d68da249158c6c657a032a1721/Products")
+    .get("https://crudcrud.com/api/6a0d7978bd8c4d8f957e48b735e21833/Products")
     .then((r) => {
       for (let index = 0; index < r.data.length; index++) {
         showData(r.data[index]._id, r.data[index].productName, r.data[index].sellingPrice);
@@ -18,13 +18,13 @@ button.addEventListener("click", () => {
   let productName = document.getElementById("productName").value;
   axios
     .post(
-      "https://crudcrud.com/api/830508d68da249158c6c657a032a1721/Products",
+      "https://crudcrud.com/api/6a0d7978bd8c4d8f957e48b735e21833/Products",
       {
         sellingPrice: sellingPrice,
         productName: productName,
       }
     )
-    .then((res) => showData(r.data._id, r.data.productName, r.data.sellingPrice))
+    .then((res) => showData(res.data._id, res.data.productName, res.data.sellingPrice))
     .catch((error) => alert(error));
 });
 function showData(_id, productName, sellingPrice) {
@@ -41,8 +41,7 @@ function showData(_id, productName, sellingPrice) {
     let dt = datas.split(" - ");
     axios
       .delete(
-        "https://crudcrud.com/api/830508d68da249158c6c657a032a1721/Products/" +
-          dt[0]
+        "https://crudcrud.com/api/6a0d7978bd8c4d8f957e48b735e21833/Products/"+dt[0]
       )
       .then(() => {
         alert("Data Deleted Succesfully");
