@@ -1,38 +1,37 @@
-window.addEventListener("DOMContentLoaded", () => {
-  axios
-    .get("https://crudcrud.com/api/d8de08a6360f4be58ad45314a92a1475/Products")
-    .then((r) => {
-      for (let index = 0; index < r.data.length; index++) {
-        showData(
-          r.data[index]._id,
-          r.data[index].productName,
-          r.data[index].sellingPrice
-        );
-      }
-    })
-
-    .catch((e) => {
-      alert(e);
-    });
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    let r = await axios.get(
+      "https://crudcrud.com/api/d8de08a6360f4be58ad45314a92a1475/Products"
+    );
+    for (let index = 0; index < r.data.length; index++) {
+      showData(
+        r.data[index]._id,
+        r.data[index].productName,
+        r.data[index].sellingPrice
+      );
+    }
+  } catch (error) {
+    alert(error);
+  }
 });
 
 let button = document.getElementById("button");
 
-button.addEventListener("click", () => {
+button.addEventListener("click", async () => {
   let sellingPrice = document.getElementById("sellingPrice").value;
   let productName = document.getElementById("productName").value;
-  axios
-    .post(
+  try {
+    let res = axios.post(
       "https://crudcrud.com/api/d8de08a6360f4be58ad45314a92a1475/Products",
       {
         sellingPrice: sellingPrice,
         productName: productName,
       }
-    )
-    .then((res) =>
-      showData(res.data._id, res.data.productName, res.data.sellingPrice)
-    )
-    .catch((error) => alert(error));
+    );
+    showData(res.data._id, res.data.productName, res.data.sellingPrice);
+  } catch (error) {
+    alert(error);
+  }
 });
 function showData(_id, productName, sellingPrice) {
   let div = document.createElement("div");
@@ -43,22 +42,22 @@ function showData(_id, productName, sellingPrice) {
   let price = Number(span.outerText) + Number(sellingPrice);
   span.innerText = price;
   let deleteButton = document.getElementById("deleteButton");
-  deleteButton.addEventListener("click", () => {
+  deleteButton.addEventListener("click", async () => {
     let datas = deleteButton.parentElement.outerText;
     deleteButton.parentElement.remove();
     let dt = datas.split(" - ");
-    axios
-      .delete(
+    try {
+      await axios.delete(
         "https://crudcrud.com/api/d8de08a6360f4be58ad45314a92a1475/Products/" +
           dt[0]
-      )
-      .then(() => {
-        alert("Data Deleted Succesfully");
-        let span = document.getElementById("totalPrice");
-        let reducedPrice = dt[2].split(" ");
-        let price = Number(span.outerText) - Number(reducedPrice[0]);
-        span.innerText = price;
-      })
-      .catch((e) => alert(e));
+      );
+      alert("Data Deleted Succesfully");
+      let span = document.getElementById("totalPrice");
+      let reducedPrice = dt[2].split(" ");
+      let price = Number(span.outerText) - Number(reducedPrice[0]);
+      span.innerText = price;
+    } catch (e) {
+      alert(e);
+    }
   });
 }
